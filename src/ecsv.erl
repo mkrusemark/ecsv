@@ -34,8 +34,13 @@ stream_from_string(String, InitState) ->
 
 stream_from_file(IoDevice, InitState) ->
     IoDeviceIterator = fun(Io) ->
-        {io:get_chars(Io, "", 1), Io}
-    end,
+															 Res = io:get_chars(Io, "", 1),
+															 case Res of
+																	 {error, _Reason} -> 
+																			 throw(Res);
+																	 _  -> {Res, Io}
+															 end
+											 end,
     iterate_chars(IoDeviceIterator, IoDevice, InitState).
 
 iterate_chars(IteratorFun, TextSource, State) ->
