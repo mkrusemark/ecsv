@@ -5,5 +5,5 @@
 % ecsv options structure
 -record(ecsv_opts, {
     % delimiter is by default the comma
-    delimiter = $\t
+    delimiter = $,
 }).
