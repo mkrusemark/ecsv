@@ -3,25 +3,32 @@
 
 -export([process_csv_file_with/2, process_csv_string_with/2]).
 -export([process_csv_file_with/3, process_csv_string_with/3]).
+-export([process_csv_file_with/4, process_csv_string_with/4]).
 
 %% @doc parse a csv file and process each parsed row with the RowFunction
 process_csv_file_with(IoDevice, RowFunction) ->
-    process_csv_file_with(IoDevice, RowFunction, []).
+		process_csv_file_with(IoDevice, RowFunction, $\t).
+
+process_csv_file_with(IoDevice, RowFunction, Delimiter) ->
+    process_csv_file_with(IoDevice, RowFunction, [], Delimiter).
 
 %% @doc parse a csv string and process each parsed row with the RowFunction
 process_csv_string_with(String, RowFunction) ->
-    process_csv_string_with(String, RowFunction, []).
+		process_csv_string_with(String, RowFunction, $\t).
+
+process_csv_string_with(String, RowFunction, Delimiter) ->
+    process_csv_string_with(String, RowFunction, [], Delimiter).
 
 %% @doc parse a csv file and process each parsed row with the RowFunction
 %% and the initial state InitState
-process_csv_file_with(IoDevice, RowFunction, RowFunctionInitState) ->
-    InitState = ecsv_parser:init(RowFunction, RowFunctionInitState),
+process_csv_file_with(IoDevice, RowFunction, RowFunctionInitState, Delimiter) ->
+    InitState = ecsv_parser:init(RowFunction, RowFunctionInitState, Delimiter),
     stream_from_file(IoDevice, InitState).
 
 %% @doc parse a csv string and process each parsed row with the RowFunction
 %% and the initial state InitState
-process_csv_string_with(String, RowFunction, RowFunctionInitState) ->
-    InitState = ecsv_parser:init(RowFunction, RowFunctionInitState),
+process_csv_string_with(String, RowFunction, RowFunctionInitState, Delimiter) ->
+    InitState = ecsv_parser:init(RowFunction, RowFunctionInitState, Delimiter),
     stream_from_string(String, InitState).
 
 % -----------------------------------------------------------------------------
